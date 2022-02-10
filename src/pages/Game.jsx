@@ -87,7 +87,7 @@ const Game = () => {
         {/* <button>Bust</button> */}
       </section>
 
-      <a href="http://localhost:3000/start">New Game</a>
+      <a href="https://darts-calculator.vercel.app">New Game</a>
     </div>
   );
 };

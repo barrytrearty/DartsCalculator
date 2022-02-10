@@ -9,7 +9,7 @@ function App() {
     <Router className="App">
       <h1>Dunmore Darts</h1>
       <Routes>
-        <Route path="start" element={<Start />} />
+        <Route path="/" element={<Start />} />
         <Route path="game/:score" element={<Game />} />
       </Routes>
     </Router>
