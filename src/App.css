@@ -1,0 +1,13 @@
+button {
+  width: 33vw;
+  height: 10vh;
+}
+
+.scores {
+  display: flex;
+  justify-content: space-around;
+}
+
+h1 {
+  text-align: center;
+}
