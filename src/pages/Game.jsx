@@ -55,6 +55,10 @@ const Game = () => {
 
   return (
     <div>
+      <section className="sides sides-game">
+        <h2>Home</h2>
+        <h2>Away</h2>
+      </section>
       <section>
         <div className="scores">
           <h1>{player1Score}</h1>

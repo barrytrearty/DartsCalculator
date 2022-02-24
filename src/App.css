@@ -1,3 +1,13 @@
+.App {
+  width: 100vw;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: white;
+}
+
 button {
   width: 33vw;
   height: 10vh;
@@ -10,8 +20,69 @@ button {
 
 h1 {
   text-align: center;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  font-size: 2rem;
 }
 
 h2 {
   text-align: center;
+  margin-top: 10px;
+}
+
+@media (min-width: 650px) {
+  .App {
+    width: 650px;
+  }
+}
+
+.sides {
+  display: flex;
+  justify-content: space-around;
+}
+
+.sides-game {
+  flex-direction: row-reverse;
+}
+
+.player-row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.checkbox-row {
+  text-align: center;
+}
+
+.select {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+#doubles-row {
+  visibility: hidden;
+}
+
+.rectangle {
+  background-color: #082366;
+  width: 124px;
+  height: 50px;
+  font-size: 1.3rem;
+  color: white;
+  text-align: center;
+  padding: 5px;
+  margin: auto;
+}
+
+.start-button {
+  margin: auto;
+  margin-top: 20vh;
+  text-align: center;
+  width: 100%;
+  text-transform: capitalize;
+  text-decoration: none;
+  color: white;
+  background-color: #18df14;
 }

@@ -3,31 +3,70 @@ import { useState } from "react";
 
 const Start = () => {
   const [score, setScore] = useState("501");
+  const [legs, setLegs] = useState("3");
+
+  const handleCheckBox = (e) => {
+    const checked = e.target.checked;
+    if (checked) {
+      console.log("checked");
+      document.getElementById("doubles-row").style.visibility = "visible";
+    } else {
+      document.getElementById("doubles-row").style.visibility = "hidden";
+    }
+  };
 
   return (
     <div>
+      <section className="sides">
+        <h2>Home</h2>
+        <h2>Away</h2>
+      </section>
       <section className="players">
-        <div>
-          <input type="text" defaultValue={"player 1"} />
-          <input type="text" defaultValue={"player 2"} />
-          {/* <input type="text" placeholder="add player" />
-          <input type="text" placeholder="add player" /> */}
+        <div className="player-row" id="singles-row">
+          <input type="text" defaultValue={"player 1"} className="rectangle" />
+          <input type="text" defaultValue={"player 2"} className="rectangle" />
+        </div>
+        <div className="checkbox-row">
+          <label>Doubles</label>
+          <input
+            type="checkbox"
+            value="1"
+            onClick={(e) => {
+              handleCheckBox(e);
+            }}
+          />
         </div>
 
-        <label>
-          <input type="checkbox" />
-          Doubles
-        </label>
+        <div className="player-row" id="doubles-row">
+          <input type="text" defaultValue={"player 3"} className="rectangle" />
+          <input type="text" defaultValue={"player 4"} className="rectangle" />
+        </div>
       </section>
-      <section className="score">
-        <label for="score">Select score:</label>
-        <select name="score" id="score">
+      <section className="score select">
+        <label for="score">Score:</label>
+        <select name="score" id="score" className="rectangle">
           <option value="501">501</option>
           <option value="301">301</option>
           <option value="120">120</option>
         </select>
       </section>
-      <Link to={`/game/${score}`}>Start Game</Link>
+      <section className="legs select">
+        <label for="legs">Legs:</label>
+        <select name="legs" id="legs" className="rectangle">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </section>
+      <section>
+        <Link to={`/game/${score}/${legs}`}>
+          <div className="start-button">START Game</div>
+        </Link>
+      </section>
     </div>
   );
 };
