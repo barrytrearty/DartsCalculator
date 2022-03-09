@@ -1,9 +1,12 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState, useToggle } from "react";
+// import { useParams } from "react-router-dom";
+import { useEffect, useState, useToggle, useContext } from "react";
+import { GameContext } from "./GameContext";
 
 const Game = () => {
-  const params = useParams();
-  let score = params.score;
+  // const params = useParams();
+  // let score = params.score;
+
+  const [score, legs] = useContext(GameContext);
 
   console.log(score);
 

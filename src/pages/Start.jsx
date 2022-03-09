@@ -1,17 +1,22 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext, useRef } from "react";
+import { GameContext } from "./GameContext";
 
 const Start = () => {
-  const [score, setScore] = useState("501");
-  const [legs, setLegs] = useState("3");
+  // const [score, setScore] = useState("501");
+  // const [legs, setLegs] = useState("3");
+
+  const [score, setScore, legs, setLegs] = useContext(GameContext);
+  const doubleRow = useRef();
 
   const handleCheckBox = (e) => {
     const checked = e.target.checked;
     if (checked) {
       console.log("checked");
-      document.getElementById("doubles-row").style.visibility = "visible";
+      // document.getElementById("doubles-row").style.visibility = "visible";
+      doubleRow.current.style.visibility = "visible";
     } else {
-      document.getElementById("doubles-row").style.visibility = "hidden";
+      doubleRow.current.style.visibility = "hidden";
     }
   };
 
@@ -37,14 +42,19 @@ const Start = () => {
           />
         </div>
 
-        <div className="player-row" id="doubles-row">
+        <div ref={doubleRow} className="player-row" id="doubles-row">
           <input type="text" defaultValue={"player 3"} className="rectangle" />
           <input type="text" defaultValue={"player 4"} className="rectangle" />
         </div>
       </section>
       <section className="score select">
         <label for="score">Score:</label>
-        <select name="score" id="score" className="rectangle">
+        <select
+          name="score"
+          id="score"
+          className="rectangle"
+          onChange={(e) => setScore(e.target.value)}
+        >
           <option value="501">501</option>
           <option value="301">301</option>
           <option value="120">120</option>
@@ -52,7 +62,12 @@ const Start = () => {
       </section>
       <section className="legs select">
         <label for="legs">Legs:</label>
-        <select name="legs" id="legs" className="rectangle">
+        <select
+          name="legs"
+          id="legs"
+          className="rectangle"
+          onChange={(e) => setLegs(e.target.value)}
+        >
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -63,7 +78,7 @@ const Start = () => {
         </select>
       </section>
       <section>
-        <Link to={`/game/${score}/${legs}`}>
+        <Link to={`/game`}>
           <div className="start-button">START Game</div>
         </Link>
       </section>

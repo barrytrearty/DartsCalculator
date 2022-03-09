@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Game from "./pages/Game";
 import Start from "./pages/Start";
+import { GameProvider } from "./pages/GameContext";
 
 function App() {
   useEffect(() => {
@@ -11,15 +12,17 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="App">
-        <h1>Dunmore Darts</h1>
-        <Routes>
-          <Route path="/" element={<Start />} />
-          <Route path="game/:score/:legs" element={<Game />} />
-        </Routes>
-      </div>
-    </Router>
+    <GameProvider>
+      <Router>
+        <div className="App">
+          <h1>Dunmore Darts</h1>
+          <Routes>
+            <Route path="/" element={<Start />} />
+            <Route path="game" element={<Game />} />
+          </Routes>
+        </div>
+      </Router>
+    </GameProvider>
   );
 }
 
