@@ -1,5 +1,5 @@
 // import { useParams } from "react-router-dom";
-import { useEffect, useState, useToggle, useContext } from "react";
+import { useEffect, useState, useToggle, useContext, useRef } from "react";
 import { GameContext } from "./GameContext";
 
 const Game = () => {
@@ -7,8 +7,6 @@ const Game = () => {
   // let score = params.score;
 
   const [score, legs] = useContext(GameContext);
-
-  console.log(score);
 
   const [player1Score, setPlayer1Score] = useState(score);
   const [player2Score, setPlayer2Score] = useState(score);
@@ -19,11 +17,15 @@ const Game = () => {
   const writeScore = (value) => {
     if (playerThrow === "") {
       setPlayerThrow(value);
+      console.log(playerThrow);
     } else {
-      //   let checkLength = playerThrow.split("");
-      //   console.log(playerThrow.length);
-      //   if (playerThrow.length < 3) {
+      // console.log(playerThrow);
+      // let checkLength = playerThrow.length;
+      // console.log(checkLength);
+      // if (checkLength.length < 3) {
       setPlayerThrow(`${playerThrow}` + value);
+      console.log(playerThrow);
+      // }
     }
   };
 
@@ -31,30 +33,54 @@ const Game = () => {
   //     setSelectedPlayer(!selectedPlayer);
   //   };
 
+  const player1 = useRef();
+  const player2 = useRef();
+
+  const button1 = useRef();
+
   const deleteDigit = () => {
     if (playerThrow === "-" || playerThrow === "") {
       console.log("no digit");
     } else {
       console.log(playerThrow.length);
-      const throwArray = playerThrow.split("");
-      console.log(throwArray);
-      throwArray.pop("");
-      console.log(throwArray);
-      const finalThrow = throwArray.join("");
-      setPlayerThrow(finalThrow);
-      console.log(finalThrow);
+      if (playerThrow.length === undefined) {
+        setPlayerThrow("");
+      } else {
+        const throwArray = playerThrow.split("");
+        console.log(throwArray);
+        throwArray.pop("");
+        console.log(throwArray);
+        const finalThrow = throwArray.join("");
+        setPlayerThrow(finalThrow);
+        console.log(finalThrow);
+      }
     }
+  };
+
+  const switchHighlight = () => {
+    player1.current.classList.toggle("active-player-score");
+    player2.current.classList.toggle("active-player-score");
   };
 
   const applyDone = () => {
     if (selectedPlayer) {
       setPlayer1Score(player1Score - playerThrow);
+      switchHighlight();
     } else {
       setPlayer2Score(player2Score - playerThrow);
+      switchHighlight();
     }
     setPlayerThrow("");
     setSelectedPlayer(!selectedPlayer);
   };
+
+  useEffect(() => {
+    if (playerThrow.length > 3) {
+      button1.current.disabled = true;
+    } else {
+      button1.current.disabled = false;
+    }
+  }, [playerThrow]);
 
   return (
     <div>
@@ -64,20 +90,24 @@ const Game = () => {
       </section>
       <section>
         <div className="scores">
-          <h1>{player1Score}</h1>
-          <h1>{player2Score}</h1>
+          <h1 ref={player1} className="active-player-score">
+            {player1Score}
+          </h1>
+          <h1 ref={player2}>{player2Score}</h1>
         </div>
 
         {/* <span>Avg:00</span> */}
       </section>
 
-      <section>
+      <section id="throw-section">
         <h2>{playerThrow}</h2>
       </section>
 
       <section>
         <div>
-          <button onClick={() => writeScore(1)}>1</button>
+          <button ref={button1} onClick={() => writeScore(1)}>
+            1
+          </button>
           <button onClick={() => writeScore(2)}>2</button>
           <button onClick={() => writeScore(3)}>3</button>
           <button onClick={() => writeScore(4)}>4</button>

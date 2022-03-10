@@ -61,6 +61,11 @@ h2 {
   text-align: center;
 }
 
+#throw-section {
+  height: 40px;
+  padding: 40px;
+}
+
 #doubles-row {
   visibility: hidden;
 }
@@ -85,4 +90,8 @@ h2 {
   text-decoration: none;
   color: white;
   background-color: #18df14;
+}
+
+.active-player-score {
+  background-color: #085b66;
 }
