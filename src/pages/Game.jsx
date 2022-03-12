@@ -128,8 +128,8 @@ const Game = () => {
 
   const nextLeg = () => {
     gameOverSign.current.style.display = "none";
-    setPlayer1Score(score);
-    setPlayer2Score(score);
+    setPlayer1Score(Number(score));
+    setPlayer2Score(Number(score));
     // playerLegsFunc(playerLegs + 1);
     buttonDel.current.disabled = false;
     toggleButtonsDisability(false);
