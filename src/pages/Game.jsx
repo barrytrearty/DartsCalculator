@@ -1,40 +1,40 @@
-// import { useParams } from "react-router-dom";
 import { useEffect, useState, useToggle, useContext, useRef } from "react";
 import { GameContext } from "./GameContext";
 
 const Game = () => {
-  // const params = useParams();
-  // let score = params.score;
+  const [
+    score,
+    setScore,
+    legs,
+    setLegs,
+    player1Name,
+    setPlayer1Name,
+    player2Name,
+    setPlayer2Name,
+  ] = useContext(GameContext);
 
-  const [score, legs] = useContext(GameContext);
+  const [player1Score, setPlayer1Score] = useState(Number(score));
+  const [player2Score, setPlayer2Score] = useState(Number(score));
 
-  const [player1Score, setPlayer1Score] = useState(score);
-  const [player2Score, setPlayer2Score] = useState(score);
+  const [player1Legs, setPlayer1Legs] = useState(0);
+  const [player2Legs, setPlayer2Legs] = useState(0);
+
   const [selectedPlayer, setSelectedPlayer] = useState(true);
 
-  const [playerThrow, setPlayerThrow] = useState("");
+  const [currentThrow, setCurrentThrow] = useState("");
 
   const writeScore = (value) => {
-    if (playerThrow === "") {
-      setPlayerThrow(value);
-      console.log(playerThrow);
+    if (currentThrow === "") {
+      setCurrentThrow(value);
+      console.log(currentThrow);
     } else {
-      // console.log(playerThrow);
-      // let checkLength = playerThrow.length;
-      // console.log(checkLength);
-      // if (checkLength.length < 3) {
-      setPlayerThrow(`${playerThrow}` + value);
-      console.log(playerThrow);
-      // }
+      setCurrentThrow(`${currentThrow}` + value);
+      console.log(currentThrow);
     }
   };
 
-  //   const switchPlayer = () => {
-  //     setSelectedPlayer(!selectedPlayer);
-  //   };
-
-  const player1 = useRef();
-  const player2 = useRef();
+  const player1Ref = useRef();
+  const player2Ref = useRef();
 
   const button1 = useRef();
   const button2 = useRef();
@@ -47,33 +47,35 @@ const Game = () => {
   const button9 = useRef();
   const buttonDel = useRef();
   const buttonDon = useRef();
+  const buttonNext = useRef();
   const button0 = useRef();
   const invalidSign = useRef();
   const gameOverSign = useRef();
   const bustSign = useRef();
 
   const deleteDigit = () => {
-    if (playerThrow === "-" || playerThrow === "") {
+    if (currentThrow === "-" || currentThrow === "") {
       console.log("no digit");
     } else {
-      console.log(playerThrow.length);
-      if (playerThrow.length === undefined) {
-        setPlayerThrow("");
+      console.log(currentThrow.length);
+      if (currentThrow.length === undefined) {
+        setCurrentThrow("");
       } else {
-        const throwArray = playerThrow.split("");
+        const throwArray = currentThrow.split("");
         console.log(throwArray);
         throwArray.pop("");
         console.log(throwArray);
         const finalThrow = throwArray.join("");
-        setPlayerThrow(finalThrow);
+        setCurrentThrow(finalThrow);
         console.log(finalThrow);
       }
     }
   };
 
-  const switchHighlight = () => {
-    player1.current.classList.toggle("active-player-score");
-    player2.current.classList.toggle("active-player-score");
+  const switchPlayer = () => {
+    player1Ref.current.classList.toggle("active-player-score");
+    player2Ref.current.classList.toggle("active-player-score");
+    setSelectedPlayer(!selectedPlayer);
   };
 
   const toggleButtonsDisability = (trueFalse) => {
@@ -89,80 +91,109 @@ const Game = () => {
     button0.current.disabled = trueFalse;
   };
 
+  const addScore = (
+    playerScore,
+    playerScoreFunc,
+    playerLegs,
+    playerLegsFunc
+  ) => {
+    if (playerScore == currentThrow) {
+      gameOverSign.current.style.display = "block";
+      playerScoreFunc(0);
+      playerLegsFunc(playerLegs + 1);
+      buttonDel.current.disabled = true;
+      toggleButtonsDisability(true);
+      buttonDon.current.style.display = "none";
+      buttonNext.current.style.display = "block";
+    }
+    if (playerScore > currentThrow) {
+      playerScoreFunc(playerScore - currentThrow);
+      switchPlayer();
+    }
+  };
+
   const applyDone = () => {
     if (selectedPlayer) {
-      if (player1Score < playerThrow) {
-        switchHighlight();
-      }
-      if (player1Score == playerThrow) {
-        gameOverSign.current.style.display = "block";
-        toggleButtonsDisability(false);
-      }
-      if (player1Score > playerThrow) {
-        setPlayer1Score(player1Score - playerThrow);
-        switchHighlight();
-      }
-    } else {
-      if (player2Score < playerThrow) {
-        switchHighlight();
-      }
-      if (player2Score == playerThrow) {
-        gameOverSign.current.style.display = "block";
-        toggleButtonsDisability(false);
-      }
-      if (player2Score > playerThrow) {
-        setPlayer2Score(player2Score - playerThrow);
-        switchHighlight();
-      }
+      addScore(player1Score, setPlayer1Score, player1Legs, setPlayer1Legs);
     }
-    setPlayerThrow("");
-    setSelectedPlayer(!selectedPlayer);
+    if (!selectedPlayer) {
+      addScore(player2Score, setPlayer2Score, player2Legs, setPlayer2Legs);
+    }
+    console.log(`player1 ${player1Score}: player2 ${player2Score}`);
+    setCurrentThrow("");
   };
 
   useEffect(() => {
-    if (playerThrow.length > 2) {
+    if (currentThrow.length > 2) {
+      toggleButtonsDisability(true);
+    } else if (player1Score === 0 || player2Score === 0) {
       toggleButtonsDisability(true);
     } else {
       toggleButtonsDisability(false);
     }
-  }, [playerThrow]);
+  }, [currentThrow]);
 
   useEffect(() => {
-    if (Number(playerThrow) > 180) {
-      // button1.current.disabled = true;
+    if (Number(currentThrow) > 180) {
       buttonDon.current.disabled = true;
       invalidSign.current.style.display = "block";
     } else {
       buttonDon.current.disabled = false;
       invalidSign.current.style.display = "none";
     }
-  }, [playerThrow]);
+  }, [currentThrow]);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (
+  //     (Number(currentThrow) > player1Score && Number(currentThrow) < 181) ||
+  //     (Number(currentThrow) > player2Score && Number(currentThrow) < 181)
+  //     // ||
+  //     // Number(currentThrow) === player1Score - 1 ||
+  //     // Number(currentThrow) === player2Score - 1
+  //   ) {
+  //     bustSign.current.style.display = "block";
+  //     toggleButtonsDisability(true);
+  //   } else {
+  //     bustSign.current.style.display = "none";
+  //   }
+  // }, [currentThrow]);
+
+  const applyBustSign = (playerScore) => {
     if (
-      (selectedPlayer &&
-        Number(playerThrow) > player1Score &&
-        Number(playerThrow) < 181) ||
-      (!selectedPlayer &&
-        Number(playerThrow) > player2Score &&
-        Number(playerThrow) < 181)
+      (Number(currentThrow) > playerScore && Number(currentThrow) < 181) ||
+      Number(currentThrow) === playerScore - 1
     ) {
       bustSign.current.style.display = "block";
-      // buttonDon.current.disabled = true;
       toggleButtonsDisability(true);
     } else {
       bustSign.current.style.display = "none";
     }
-  }, [playerThrow]);
+  };
+
+  useEffect(() => {
+    if (selectedPlayer) {
+      applyBustSign(player1Score);
+    } else if (!selectedPlayer) {
+      applyBustSign(player2Score);
+    }
+
+    // ||
+    // Number(currentThrow) === player1Score - 1 ||
+    // Number(currentThrow) === player2Score - 1
+
+    // } else {
+    //   bustSign.current.style.display = "none";
+    // }
+  }, [currentThrow]);
 
   // useEffect(() => {
   //   if (selectedPlayer) {
-  //     if (Number(playerThrow) > player1Score && Number(playerThrow) < 181) {
+  //     if (Number(currentThrow) > player1Score && Number(currentThrow) < 181) {
   //       bustSign.current.style.display = "block";
   //       // buttonDon.current.disabled = true;
   //       toggleButtonsDisability(true);
   //     } else {
-  //       if (Number(playerThrow) > player2Score && Number(playerThrow) < 181) {
+  //       if (Number(currentThrow) > player2Score && Number(currentThrow) < 181) {
   //         bustSign.current.style.display = "block";
   //         // buttonDon.current.disabled = true;
   //         toggleButtonsDisability(true);
@@ -170,11 +201,11 @@ const Game = () => {
   //     }
   //     // if (
   //     //   (
-  //     //     Number(playerThrow) > player1Score &&
-  //     //     Number(playerThrow) < 181) ||
+  //     //     Number(currentThrow) > player1Score &&
+  //     //     Number(currentThrow) < 181) ||
   //     //   (!selectedPlayer &&
-  //     //     Number(playerThrow) > player2Score &&
-  //     //     Number(playerThrow) < 181)
+  //     //     Number(currentThrow) > player2Score &&
+  //     //     Number(currentThrow) < 181)
   //     // ) {
   //     //   bustSign.current.style.display = "block";
   //     //   // buttonDon.current.disabled = true;
@@ -182,27 +213,31 @@ const Game = () => {
   //   } else {
   //     bustSign.current.style.display = "none";
   //   }
-  // }, [playerThrow]);
+  // }, [currentThrow]);
 
   return (
     <div>
-      <section className="sides sides-game">
-        <h2>Home</h2>
-        <h2>Away</h2>
+      <section className="sides">
+        <span>Legs: {player1Legs}</span>
+        <span>Legs: {player2Legs}</span>
+      </section>
+      <section className="sides">
+        <h2>{player1Name}</h2>
+        <h2>{player2Name}</h2>
       </section>
       <section>
         <div className="scores">
-          <h1 ref={player1} className="active-player-score">
+          <h1 ref={player1Ref} className="active-player-score">
             {player1Score}
           </h1>
-          <h1 ref={player2}>{player2Score}</h1>
+          <h1 ref={player2Ref}>{player2Score}</h1>
         </div>
 
         {/* <span>Avg:00</span> */}
       </section>
 
       <section id="throw-section">
-        <h2>{playerThrow}</h2>
+        <h2>{currentThrow}</h2>
       </section>
 
       <section id="throw-section">
@@ -254,6 +289,9 @@ const Game = () => {
           </button>
           <button ref={buttonDon} onClick={applyDone}>
             Done
+          </button>
+          <button ref={buttonNext} className="hidden" onClick={applyDone}>
+            Next Leg
           </button>
         </div>
 
