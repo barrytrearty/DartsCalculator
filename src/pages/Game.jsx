@@ -106,8 +106,11 @@ const Game = () => {
       buttonDon.current.style.display = "none";
       buttonNext.current.style.display = "block";
     }
-    if (playerScore > currentThrow) {
+    if (playerScore > currentThrow && playerScore - 1 != currentThrow) {
       playerScoreFunc(playerScore - currentThrow);
+      switchPlayer();
+    }
+    if (playerScore < currentThrow || playerScore - 1 == currentThrow) {
       switchPlayer();
     }
   };
@@ -121,6 +124,18 @@ const Game = () => {
     }
     console.log(`player1 ${player1Score}: player2 ${player2Score}`);
     setCurrentThrow("");
+  };
+
+  const nextLeg = () => {
+    gameOverSign.current.style.display = "none";
+    setPlayer1Score(score);
+    setPlayer2Score(score);
+    // playerLegsFunc(playerLegs + 1);
+    buttonDel.current.disabled = false;
+    toggleButtonsDisability(false);
+    buttonDon.current.style.display = "block";
+    buttonNext.current.style.display = "none";
+    switchPlayer();
   };
 
   useEffect(() => {
@@ -287,11 +302,11 @@ const Game = () => {
           <button ref={button0} onClick={() => writeScore(0)}>
             0
           </button>
+          <button ref={buttonNext} className="hidden" onClick={nextLeg}>
+            Next Leg
+          </button>
           <button ref={buttonDon} onClick={applyDone}>
             Done
-          </button>
-          <button ref={buttonNext} className="hidden" onClick={applyDone}>
-            Next Leg
           </button>
         </div>
 
