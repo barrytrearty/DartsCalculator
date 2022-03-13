@@ -13,6 +13,11 @@ const Game = () => {
     setPlayer2Name,
   ] = useContext(GameContext);
 
+  // Fix done / next leg button
+  // Add in average
+  // Add in checkouts
+  // Fix styling
+
   const [player1Score, setPlayer1Score] = useState(Number(score));
   const [player2Score, setPlayer2Score] = useState(Number(score));
 

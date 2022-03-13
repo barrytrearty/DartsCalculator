@@ -15,7 +15,6 @@ function App() {
     <GameProvider>
       <Router>
         <div className="App">
-          <h1>Dunmore Darts</h1>
           <Routes>
             <Route path="/" element={<Start />} />
             <Route path="game" element={<Game />} />

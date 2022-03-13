@@ -28,6 +28,7 @@ const Start = () => {
 
   return (
     <div>
+      <h1>Dunmore Darts</h1>
       <section className="players">
         <div className="player-row" id="singles-row">
           <input
