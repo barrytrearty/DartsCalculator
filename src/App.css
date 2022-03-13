@@ -13,22 +13,21 @@ button {
   height: 10vh;
 }
 
-.scores {
+.spacing {
   display: flex;
   justify-content: space-around;
 }
 
 h1 {
   text-align: center;
-  margin: auto;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 0px;
   font-size: 2rem;
 }
 
 h2 {
   text-align: center;
-  margin-top: 10px;
+  margin: 10px;
 }
 
 @media (min-width: 650px) {
@@ -42,13 +41,19 @@ h2 {
   justify-content: space-around;
 }
 
-/* .sides-game {
-  flex-direction: row-reverse;
-} */
+.legs {
+  display: flex;
+  justify-content: space-around;
+}
+
+.legs span {
+  padding-left: 20px;
+  padding-right: 20px;
+}
 
 .player-row {
   display: flex;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 }
 
 .checkbox-row {
@@ -62,8 +67,8 @@ h2 {
 }
 
 #throw-section {
-  height: 20px;
-  padding-bottom: 20px;
+  height: 40px;
+  margin-bottom: 20px;
 }
 
 #doubles-row {

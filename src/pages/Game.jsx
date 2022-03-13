@@ -23,16 +23,6 @@ const Game = () => {
 
   const [currentThrow, setCurrentThrow] = useState("");
 
-  const writeScore = (value) => {
-    if (currentThrow === "") {
-      setCurrentThrow(value);
-      console.log(currentThrow);
-    } else {
-      setCurrentThrow(`${currentThrow}` + value);
-      console.log(currentThrow);
-    }
-  };
-
   const player1Ref = useRef();
   const player2Ref = useRef();
 
@@ -52,6 +42,16 @@ const Game = () => {
   const invalidSign = useRef();
   const gameOverSign = useRef();
   const bustSign = useRef();
+
+  const writeScore = (value) => {
+    if (currentThrow === "") {
+      setCurrentThrow(value);
+      console.log(currentThrow);
+    } else {
+      setCurrentThrow(`${currentThrow}` + value);
+      console.log(currentThrow);
+    }
+  };
 
   const deleteDigit = () => {
     if (currentThrow === "-" || currentThrow === "") {
@@ -126,6 +126,18 @@ const Game = () => {
     setCurrentThrow("");
   };
 
+  const applyBustSign = (playerScore) => {
+    if (
+      (Number(currentThrow) > playerScore && Number(currentThrow) < 181) ||
+      Number(currentThrow) === playerScore - 1
+    ) {
+      bustSign.current.style.display = "block";
+      toggleButtonsDisability(true);
+    } else {
+      bustSign.current.style.display = "none";
+    }
+  };
+
   const nextLeg = () => {
     gameOverSign.current.style.display = "none";
     setPlayer1Score(Number(score));
@@ -133,10 +145,14 @@ const Game = () => {
     // playerLegsFunc(playerLegs + 1);
     buttonDel.current.disabled = false;
     toggleButtonsDisability(false);
-    buttonDon.current.style.display = "block";
     buttonNext.current.style.display = "none";
+    buttonDon.current.style.display = "block";
     switchPlayer();
   };
+
+  useEffect(() => {
+    buttonNext.current.style.display = "none";
+  }, []);
 
   useEffect(() => {
     if (currentThrow.length > 2) {
@@ -158,93 +174,31 @@ const Game = () => {
     }
   }, [currentThrow]);
 
-  // useEffect(() => {
-  //   if (
-  //     (Number(currentThrow) > player1Score && Number(currentThrow) < 181) ||
-  //     (Number(currentThrow) > player2Score && Number(currentThrow) < 181)
-  //     // ||
-  //     // Number(currentThrow) === player1Score - 1 ||
-  //     // Number(currentThrow) === player2Score - 1
-  //   ) {
-  //     bustSign.current.style.display = "block";
-  //     toggleButtonsDisability(true);
-  //   } else {
-  //     bustSign.current.style.display = "none";
-  //   }
-  // }, [currentThrow]);
-
-  const applyBustSign = (playerScore) => {
-    if (
-      (Number(currentThrow) > playerScore && Number(currentThrow) < 181) ||
-      Number(currentThrow) === playerScore - 1
-    ) {
-      bustSign.current.style.display = "block";
-      toggleButtonsDisability(true);
-    } else {
-      bustSign.current.style.display = "none";
-    }
-  };
-
   useEffect(() => {
     if (selectedPlayer) {
       applyBustSign(player1Score);
     } else if (!selectedPlayer) {
       applyBustSign(player2Score);
     }
-
-    // ||
-    // Number(currentThrow) === player1Score - 1 ||
-    // Number(currentThrow) === player2Score - 1
-
-    // } else {
-    //   bustSign.current.style.display = "none";
-    // }
   }, [currentThrow]);
-
-  // useEffect(() => {
-  //   if (selectedPlayer) {
-  //     if (Number(currentThrow) > player1Score && Number(currentThrow) < 181) {
-  //       bustSign.current.style.display = "block";
-  //       // buttonDon.current.disabled = true;
-  //       toggleButtonsDisability(true);
-  //     } else {
-  //       if (Number(currentThrow) > player2Score && Number(currentThrow) < 181) {
-  //         bustSign.current.style.display = "block";
-  //         // buttonDon.current.disabled = true;
-  //         toggleButtonsDisability(true);
-  //       }
-  //     }
-  //     // if (
-  //     //   (
-  //     //     Number(currentThrow) > player1Score &&
-  //     //     Number(currentThrow) < 181) ||
-  //     //   (!selectedPlayer &&
-  //     //     Number(currentThrow) > player2Score &&
-  //     //     Number(currentThrow) < 181)
-  //     // ) {
-  //     //   bustSign.current.style.display = "block";
-  //     //   // buttonDon.current.disabled = true;
-  //     //   toggleButtonsDisability(true);
-  //   } else {
-  //     bustSign.current.style.display = "none";
-  //   }
-  // }, [currentThrow]);
 
   return (
     <div>
-      <section className="sides">
-        <span>Legs: {player1Legs}</span>
-        <span>Legs: {player2Legs}</span>
-      </section>
-      <section className="sides">
+      <section className="spacing">
         <h2>{player1Name}</h2>
         <h2>{player2Name}</h2>
       </section>
+      <section className="spacing">
+        <span>{player1Legs}</span>
+        <span>Legs</span>
+        <span>{player2Legs}</span>
+      </section>
       <section>
-        <div className="scores">
+        <div className="spacing">
           <h1 ref={player1Ref} className="active-player-score">
             {player1Score}
           </h1>
+          <h1>Score</h1>
           <h1 ref={player2Ref}>{player2Score}</h1>
         </div>
 
@@ -302,7 +256,7 @@ const Game = () => {
           <button ref={button0} onClick={() => writeScore(0)}>
             0
           </button>
-          <button ref={buttonNext} className="hidden" onClick={nextLeg}>
+          <button ref={buttonNext} onClick={nextLeg}>
             Next Leg
           </button>
           <button ref={buttonDon} onClick={applyDone}>
