@@ -13,7 +13,6 @@ const Game = () => {
     setPlayer2Name,
   ] = useContext(GameContext);
 
-  // Fix done / next leg button
   // Add in average
   // Add in checkouts
   // Fix styling
@@ -27,6 +26,7 @@ const Game = () => {
   const [selectedPlayer, setSelectedPlayer] = useState(true);
 
   const [currentThrow, setCurrentThrow] = useState("");
+  const [nextLegButton, setNextLegButton] = useState(false);
 
   const player1Ref = useRef();
   const player2Ref = useRef();
@@ -42,7 +42,7 @@ const Game = () => {
   const button9 = useRef();
   const buttonDel = useRef();
   const buttonDon = useRef();
-  const buttonNext = useRef();
+  // const buttonNext = useRef();
   const button0 = useRef();
   const invalidSign = useRef();
   const gameOverSign = useRef();
@@ -108,8 +108,9 @@ const Game = () => {
       playerLegsFunc(playerLegs + 1);
       buttonDel.current.disabled = true;
       toggleButtonsDisability(true);
-      buttonDon.current.style.display = "none";
-      buttonNext.current.style.display = "block";
+      setNextLegButton(true);
+      // buttonDon.current.style.display = "none";
+      // buttonNext.current.style.display = "block";
     }
     if (playerScore > currentThrow && playerScore - 1 != currentThrow) {
       playerScoreFunc(playerScore - currentThrow);
@@ -121,14 +122,18 @@ const Game = () => {
   };
 
   const applyDone = () => {
-    if (selectedPlayer) {
-      addScore(player1Score, setPlayer1Score, player1Legs, setPlayer1Legs);
+    if (nextLegButton) {
+      nextLeg();
+    } else {
+      if (selectedPlayer) {
+        addScore(player1Score, setPlayer1Score, player1Legs, setPlayer1Legs);
+      }
+      if (!selectedPlayer) {
+        addScore(player2Score, setPlayer2Score, player2Legs, setPlayer2Legs);
+      }
+      console.log(`player1 ${player1Score}: player2 ${player2Score}`);
+      setCurrentThrow("");
     }
-    if (!selectedPlayer) {
-      addScore(player2Score, setPlayer2Score, player2Legs, setPlayer2Legs);
-    }
-    console.log(`player1 ${player1Score}: player2 ${player2Score}`);
-    setCurrentThrow("");
   };
 
   const applyBustSign = (playerScore) => {
@@ -147,17 +152,11 @@ const Game = () => {
     gameOverSign.current.style.display = "none";
     setPlayer1Score(Number(score));
     setPlayer2Score(Number(score));
-    // playerLegsFunc(playerLegs + 1);
     buttonDel.current.disabled = false;
     toggleButtonsDisability(false);
-    buttonNext.current.style.display = "none";
-    buttonDon.current.style.display = "block";
+    setNextLegButton(false);
     switchPlayer();
   };
-
-  useEffect(() => {
-    buttonNext.current.style.display = "none";
-  }, []);
 
   useEffect(() => {
     if (currentThrow.length > 2) {
@@ -170,6 +169,7 @@ const Game = () => {
   }, [currentThrow]);
 
   useEffect(() => {
+    // if (buttonDon) {
     if (Number(currentThrow) > 180) {
       buttonDon.current.disabled = true;
       invalidSign.current.style.display = "block";
@@ -177,6 +177,7 @@ const Game = () => {
       buttonDon.current.disabled = false;
       invalidSign.current.style.display = "none";
     }
+    // }
   }, [currentThrow]);
 
   useEffect(() => {
@@ -261,15 +262,11 @@ const Game = () => {
           <button ref={button0} onClick={() => writeScore(0)}>
             0
           </button>
-          <button ref={buttonNext} onClick={nextLeg}>
-            Next Leg
-          </button>
+
           <button ref={buttonDon} onClick={applyDone}>
-            Done
+            {nextLegButton ? `Next leg` : `Done`}
           </button>
         </div>
-
-        {/* <button>Bust</button> */}
       </section>
 
       <a href="https://darts-calculator.vercel.app">New Game</a>
