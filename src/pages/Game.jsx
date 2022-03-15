@@ -33,6 +33,7 @@ const Game = () => {
 
   const [currentThrow, setCurrentThrow] = useState("");
   const [nextLegButton, setNextLegButton] = useState(false);
+  const [legCount, setLegCount] = useState(1);
 
   const player1Ref = useRef();
   const player2Ref = useRef();
@@ -142,13 +143,14 @@ const Game = () => {
     // );
 
     if (playerScore == currentThrow) {
-      // messageSect.current.textContent = "GAME OVER";
       // gameOverSign.current.style.display = "block";
       playerScoreFunc(0);
       playerLegsFunc(playerLegs + 1);
       buttonDel.current.disabled = true;
       toggleButtonsDisability(true);
       setNextLegButton(true);
+      messageSect.current.textContent = "GAME OVER";
+      setLegCount(legCount + 1);
       // buttonDon.current.style.display = "none";
       // buttonNext.current.style.display = "block";
     }
@@ -213,7 +215,7 @@ const Game = () => {
   };
 
   const nextLeg = () => {
-    // messageSect.current.textContent = "";
+    messageSect.current.textContent = "";
 
     // gameOverSign.current.style.display = "none";
     setPlayer1Score(Number(score));
@@ -221,7 +223,18 @@ const Game = () => {
     buttonDel.current.disabled = false;
     toggleButtonsDisability(false);
     setNextLegButton(false);
-    switchPlayer();
+    if (legCount % 2 === 0) {
+      player2Ref.current.classList.add("active-player-score");
+      player1Ref.current.classList.remove("active-player-score");
+      setSelectedPlayer(false);
+    }
+    if (legCount % 2 !== 0) {
+      player1Ref.current.classList.add("active-player-score");
+      player2Ref.current.classList.remove("active-player-score");
+      setSelectedPlayer(true);
+    }
+
+    // switchPlayer();
   };
 
   useEffect(() => {
@@ -241,7 +254,7 @@ const Game = () => {
       messageSect.current.textContent = "INVALID SCORE";
       // invalidSign.current.textContent = "TEST";
       // invalidSign.current.style.display = "block";
-    } else {
+    } else if (!nextLegButton) {
       buttonDon.current.disabled = false;
       messageSect.current.textContent = "";
       // invalidSign.current.style.display = "none";
