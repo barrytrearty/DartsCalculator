@@ -14,7 +14,6 @@ const Game = () => {
   ] = useContext(GameContext);
 
   // Add in average
-  // Add in checkouts
   // Fix styling
 
   const [player1Score, setPlayer1Score] = useState(Number(score));
