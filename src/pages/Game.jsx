@@ -19,9 +19,15 @@ const Game = () => {
 
   const [player1Score, setPlayer1Score] = useState(Number(score));
   const [player2Score, setPlayer2Score] = useState(Number(score));
-
   const [player1Legs, setPlayer1Legs] = useState(0);
   const [player2Legs, setPlayer2Legs] = useState(0);
+
+  // const [player1Total, setPlayer1Total] = useState(0);
+  // const [player2Total, setPlayer2Total] = useState(0);
+  // const [player1Avg, setPlayer1Avg] = useState(0);
+  // const [player2Avg, setPlayer2Avg] = useState(0);
+  // const [player1Throws, setPlayer1Throws] = useState(0);
+  // const [player2Throws, setPlayer2Throws] = useState(0);
 
   const [selectedPlayer, setSelectedPlayer] = useState(true);
 
@@ -44,9 +50,10 @@ const Game = () => {
   const buttonDon = useRef();
   // const buttonNext = useRef();
   const button0 = useRef();
-  const invalidSign = useRef();
-  const gameOverSign = useRef();
-  const bustSign = useRef();
+  // const invalidSign = useRef();
+  // const gameOverSign = useRef();
+  // const bustSign = useRef();
+  const messageSect = useRef();
 
   const writeScore = (value) => {
     if (currentThrow === "") {
@@ -96,14 +103,47 @@ const Game = () => {
     button0.current.disabled = trueFalse;
   };
 
+  // const setAverage = (
+  //   currentThrow,
+  //   playerTotal,
+  //   playerTotalFunc,
+  //   playerThrows,
+  //   playerThrowsFunc,
+  //   playerAvgFunc
+  // ) => {
+  //   playerThrowsFunc(playerThrows + 1);
+  //   console.log(playerThrows);
+  //   playerTotalFunc(playerTotal + currentThrow);
+  //   playerAvgFunc(playerTotal / playerThrows);
+  //   console.log(playerTotal);
+  //   // console.log(playerScore);
+  // };
+
   const addScore = (
+    // currentThrow,
     playerScore,
     playerScoreFunc,
     playerLegs,
     playerLegsFunc
+    //////////////
+    // playerTotal,
+    // playerTotalFunc,
+    // playerThrows,
+    // playerThrowsFunc,
+    // playerAvgFunc
   ) => {
+    // setAverage(
+    //   playerScore,
+    //   playerTotal,
+    //   playerTotalFunc,
+    //   playerThrows,
+    //   playerThrowsFunc,
+    //   playerAvgFunc
+    // );
+
     if (playerScore == currentThrow) {
-      gameOverSign.current.style.display = "block";
+      // messageSect.current.textContent = "GAME OVER";
+      // gameOverSign.current.style.display = "block";
       playerScoreFunc(0);
       playerLegsFunc(playerLegs + 1);
       buttonDel.current.disabled = true;
@@ -126,10 +166,32 @@ const Game = () => {
       nextLeg();
     } else {
       if (selectedPlayer) {
-        addScore(player1Score, setPlayer1Score, player1Legs, setPlayer1Legs);
+        addScore(
+          // currentThrow,
+          player1Score,
+          setPlayer1Score,
+          player1Legs,
+          setPlayer1Legs
+          // player1Total,
+          // setPlayer1Total,
+          // player1Throws,
+          // setPlayer1Throws,
+          // setPlayer1Avg
+        );
       }
       if (!selectedPlayer) {
-        addScore(player2Score, setPlayer2Score, player2Legs, setPlayer2Legs);
+        addScore(
+          // currentThrow,
+          player2Score,
+          setPlayer2Score,
+          player2Legs,
+          setPlayer2Legs
+          // player2Total,
+          // setPlayer2Total,
+          // player2Throws,
+          // setPlayer2Throws,
+          // setPlayer2Avg
+        );
       }
       console.log(`player1 ${player1Score}: player2 ${player2Score}`);
       setCurrentThrow("");
@@ -141,15 +203,19 @@ const Game = () => {
       (Number(currentThrow) > playerScore && Number(currentThrow) < 181) ||
       Number(currentThrow) === playerScore - 1
     ) {
-      bustSign.current.style.display = "block";
+      messageSect.current.textContent = "BUST";
+      // bustSign.current.style.display = "block";
       toggleButtonsDisability(true);
-    } else {
-      bustSign.current.style.display = "none";
     }
+    //  else {
+    //   bustSign.current.style.display = "none";
+    // }
   };
 
   const nextLeg = () => {
-    gameOverSign.current.style.display = "none";
+    // messageSect.current.textContent = "";
+
+    // gameOverSign.current.style.display = "none";
     setPlayer1Score(Number(score));
     setPlayer2Score(Number(score));
     buttonDel.current.disabled = false;
@@ -172,10 +238,13 @@ const Game = () => {
     // if (buttonDon) {
     if (Number(currentThrow) > 180) {
       buttonDon.current.disabled = true;
-      invalidSign.current.style.display = "block";
+      messageSect.current.textContent = "INVALID SCORE";
+      // invalidSign.current.textContent = "TEST";
+      // invalidSign.current.style.display = "block";
     } else {
       buttonDon.current.disabled = false;
-      invalidSign.current.style.display = "none";
+      messageSect.current.textContent = "";
+      // invalidSign.current.style.display = "none";
     }
     // }
   }, [currentThrow]);
@@ -188,43 +257,53 @@ const Game = () => {
     }
   }, [currentThrow]);
 
+  useEffect(() => {
+    messageSect.current.textContent = "";
+  }, []);
+
   return (
     <div>
-      <section className="spacing">
-        <h2>{player1Name}</h2>
-        <h2>{player2Name}</h2>
-      </section>
-      <section className="spacing">
-        <span>{player1Legs}</span>
-        <span>Legs</span>
-        <span>{player2Legs}</span>
-      </section>
-      <section>
-        <div className="spacing">
-          <h1 ref={player1Ref} className="active-player-score">
-            {player1Score}
-          </h1>
-          <h1>Score</h1>
-          <h1 ref={player2Ref}>{player2Score}</h1>
-        </div>
+      <div className="score-container">
+        <section className="spacing">
+          <h2>{player1Name}</h2>
+          <h2>{player2Name}</h2>
+        </section>
+        <section className="spacing">
+          <span className="dont-move">{player1Legs}</span>
+          <span>LEGS</span>
+          <span className="dont-move">{player2Legs}</span>
+        </section>
+        <section>
+          <div className="spacing">
+            <span ref={player1Ref} className="active-player-score dont-move">
+              {player1Score}
+            </span>
+            <span>SCORE</span>
+            <span ref={player2Ref} className="dont-move">
+              {player2Score}
+            </span>
+          </div>
 
-        {/* <span>Avg:00</span> */}
-      </section>
-
+          {/* <span>Avg:00</span> */}
+        </section>
+        {/* <section className="spacing">
+          <span className="dont-move">{player1Avg}</span>
+          <span>Avg</span>
+          <span className="dont-move">{player2Avg}</span>
+        </section> */}
+      </div>
       <section id="throw-section">
         <h2>{currentThrow}</h2>
       </section>
 
-      <section id="throw-section">
-        <h2 ref={invalidSign} className="hidden">
-          INVALID SCORE
-        </h2>
-        <h2 ref={gameOverSign} className="hidden">
-          GAME OVER
-        </h2>
-        <h2 ref={bustSign} className="hidden">
-          BUST
-        </h2>
+      <section className="message-section">
+        <h2 ref={messageSect}>TEST </h2>
+      </section>
+
+      <section className="checkout-section">
+        <span>T20</span>
+        <span>T20</span>
+        <span>D20</span>
       </section>
 
       <section>
