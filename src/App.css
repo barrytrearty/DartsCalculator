@@ -6,6 +6,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: white;
+  /* background-image: url('https://images.unsplash.com/photo-1580894328141-6f3421a182a8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8ZGFydHN8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60')"; */
 }
 
 button {
@@ -122,13 +123,17 @@ h2 {
 
 .start-button {
   margin: auto;
-  margin-top: 20vh;
   text-align: center;
   width: 100%;
   text-transform: capitalize;
   text-decoration: none;
-  color: white;
+  color: rgb(0, 0, 0);
   background-color: #18df14;
+  font-weight: 700;
+}
+
+.extra-margin {
+  margin-top: 20vh;
 }
 
 .active-player-score {
@@ -137,4 +142,24 @@ h2 {
 
 .hidden {
   display: none;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+button {
+  background-color: #082366;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+button:disabled {
+  background-color: #0823661c;
+  color: black;
+}
+
+button:hover {
+  background-color: #0823666b;
 }

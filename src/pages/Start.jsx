@@ -93,8 +93,8 @@ const Start = () => {
         </select>
       </section>
       <section>
-        <Link to={`/game`}>
-          <div className="start-button">START Game</div>
+        <Link to={`/game`} className="no-underline">
+          <div className="start-button  extra-margin">Start</div>
         </Link>
       </section>
     </div>

@@ -312,11 +312,11 @@ const Game = () => {
         <h2 ref={messageSect}>TEST </h2>
       </section>
 
-      <section className="checkout-section">
+      {/* <section className="checkout-section">
         <span>T20</span>
         <span>T20</span>
         <span>D20</span>
-      </section>
+      </section> */}
 
       <section>
         <div>
@@ -359,8 +359,13 @@ const Game = () => {
           </button>
         </div>
       </section>
-
-      <a href="https://darts-calculator.vercel.app">New Game</a>
+      {/* <Link to={`/game`} className="no-underline">
+          <div className="start-button">START</div>
+        </Link> */}
+      {/* <a href="https://darts-calculator.vercel.app">New Game</a> */}
+      <a href="https://darts-calculator.vercel.app" className="no-underline">
+        <div className="start-button">New Game</div>
+      </a>
     </div>
   );
 };
