@@ -163,3 +163,7 @@ button:disabled {
 button:hover {
   background-color: #0823666b;
 }
+
+.extra-margin {
+  margin-top: 2rem;
+}

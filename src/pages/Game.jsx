@@ -364,7 +364,7 @@ const Game = () => {
         </Link> */}
       {/* <a href="https://darts-calculator.vercel.app">New Game</a> */}
       <a href="https://darts-calculator.vercel.app" className="no-underline">
-        <div className="start-button">New Game</div>
+        <div className="start-button extra-margin">New Game</div>
       </a>
     </div>
   );
